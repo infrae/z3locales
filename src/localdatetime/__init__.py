@@ -63,7 +63,7 @@ def getFormattedNow(self):
     return formatter.format(d)
 
 __marker__ = []
-def getFormattedDate(self, date, size="full", locale=__marker__):
+def getFormattedDate(self, date, size="full", locale=__marker__, display_time=True):
     """return a formatted date
 
         date should be a tuple (year, month, day[, hour[, minute[, second]]])
@@ -74,7 +74,10 @@ def getFormattedDate(self, date, size="full", locale=__marker__):
     if l is __marker__:
         l = getlocaleinfo(self)[0]
     parts = l.split('-')
-    formatter = locales.getLocale(*parts).dates.getFormatter('dateTime', size)
+    format = 'dateTime'
+    if not display_time:
+      format = 'date'
+    formatter = locales.getLocale(*parts).dates.getFormatter(format, size)
     return formatter.format(d)
 
 def getMonthNames(self, locale=None, calendar='gregorian'):
