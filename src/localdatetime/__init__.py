@@ -76,3 +76,19 @@ def getFormattedDate(self, date, size="full", locale=__marker__):
     parts = l.split('-')
     formatter = locales.getLocale(*parts).dates.getFormatter('dateTime', size)
     return formatter.format(d)
+
+def getMonthNames(self, locale=None, calendar='gregorian'):
+    """returns a list of month names for the current locale"""
+    l = locale
+    if l is None:
+        l = getlocaleinfo(self)[0]
+    parts = l.split('-')
+    return locales.getLocale(*parts).dates.calendars[calendar].getMonthNames()
+
+def getMonthAbbreviations(self, locale=None, calendar='gregorian'):
+    """returns a list of abbreviated month names for the current locale"""
+    l = locale
+    if l is None:
+        l = getlocaleinfo(self)[0]
+    parts = l.split('-')
+    return locales.getLocale(*parts).dates.calendars[calendar].getMonthAbbreviations()
