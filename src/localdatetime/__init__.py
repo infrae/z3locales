@@ -1,4 +1,8 @@
-from z3locales.i18n.locales import locales
+# Copyright (c) 2004-2008 Infrae. All rights reserved.
+# See also LICENSE.txt
+# $Id$
+
+from zope.i18n.locales import locales
 
 def normalize_lang(lang):
     lang = lang.strip().lower()

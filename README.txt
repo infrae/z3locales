@@ -1,7 +1,3 @@
-$Revision: 1.1 $
-
-Copyright (c) 2005 Infrae. All rights reserved.
-See also LICENSE.txt
 
 Meta::
 
