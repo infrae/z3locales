@@ -5,7 +5,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '0.2'
+version = '0.3'
 
 setup(name='z3locales',
       version=version,
