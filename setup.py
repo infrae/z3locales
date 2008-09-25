@@ -9,7 +9,7 @@ version = '0.2'
 
 setup(name='z3locales',
       version=version,
-      description="Common Python library which contains reusable components, developed at Infrae.",
+      description="Display localized dates in Zope 2 using Zope 3 components.",
       long_description=open("README.txt").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
@@ -22,9 +22,9 @@ setup(name='z3locales',
               "Topic :: Software Development :: Libraries :: Python Modules",
         ],
       keywords='internationalization zope2 zope3 i18n',
-      author='Infrae',
+      author='Guido Wesdorp',
       author_email='info@infrae.com',
-      url='http://infrae.com/products/silva',
+      url='http://infrae.com/download/z3locales',
       license='ZPL 2.1',
       packages=find_packages('src', exclude=['ez_setup']),
       package_dir = {'': 'src'},
