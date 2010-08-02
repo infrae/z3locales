@@ -2,24 +2,29 @@
 # See also LICENSE.txt
 # $Id$
 
+from datetime import datetime
+import time
+
 from zope.i18n.locales import locales
 
-def normalize_lang(lang):
+
+def normalize_language(lang):
     lang = lang.strip().lower()
     lang = lang.replace('_', '-')
     lang = lang.replace(' ', '')
     return lang
 
-def getlocaleinfo(self):
-    request = self.REQUEST
+_marker = object()
+
+def get_locale_info(request):
+    assert request != _marker
     accept_langs = request.get('HTTP_ACCEPT_LANGUAGE', '').split(',')
 
     # Normalize lang strings
-    accept_langs = map(normalize_lang, accept_langs)
+    accept_langs = map(normalize_language, accept_langs)
     # Then filter out empty ones
     accept_langs = filter(None, accept_langs)
 
-    length = len(accept_langs)
     accepts = []
 
     for index, lang in enumerate(accept_langs):
@@ -53,49 +58,64 @@ def getlocaleinfo(self):
     accepts.sort()
     accepts.reverse()
 
-    return [lang for quality, lang in accepts]
+    return accepts[0][1] if len(accepts) else 'en'
 
 
-def getFormattedNow(self):
-    from datetime import datetime
-    import time
-    now = time.gmtime()
-    d = datetime(*now[:6])
-    l = getlocaleinfo(self)[0]
-    parts = l.split('-')
-    formatter = locales.getLocale(*parts).dates.getFormatter('dateTime', 'full')
-    return formatter.format(d)
-
-__marker__ = []
-def getFormattedDate(self, date, size="full", locale=__marker__, display_time=True):
-    """return a formatted date
-
-        date should be a tuple (year, month, day[, hour[, minute[, second]]])
+def get_locale_dates(request=_marker, locale=_marker):
+    """Return the date formatter given the request.
     """
-    from datetime import datetime
-    d = datetime(*date)
-    l = locale
-    if l is __marker__:
-        l = getlocaleinfo(self)[0]
-    parts = l.split('-')
-    format = 'dateTime'
-    if not display_time:
-      format = 'date'
-    formatter = locales.getLocale(*parts).dates.getFormatter(format, size)
-    return formatter.format(d)
+    local_info = locale
+    if local_info is _marker:
+        local_info = get_locale_info(request)
+    return locales.getLocale(*local_info.split('-')).dates
 
-def getMonthNames(self, locale=None, calendar='gregorian'):
-    """returns a list of month names for the current locale"""
-    l = locale
-    if l is None:
-        l = getlocaleinfo(self)[0]
-    parts = l.split('-')
-    return locales.getLocale(*parts).dates.calendars[calendar].getMonthNames()
 
-def getMonthAbbreviations(self, locale=None, calendar='gregorian'):
-    """returns a list of abbreviated month names for the current locale"""
-    l = locale
-    if l is None:
-        l = getlocaleinfo(self)[0]
-    parts = l.split('-')
-    return locales.getLocale(*parts).dates.calendars[calendar].getMonthAbbreviations()
+def get_formatted_now(request):
+    """Return the current date formatted given the request local
+    """
+    now = time.gmtime()
+    formatter = get_locale_dates(request).getFormatter('dateTime', 'full')
+    return formatter.format(datetime(*now[:6]))
+
+
+def get_formatted_date(
+    date, size="full", request=_marker, locale=_marker, display_time=True):
+    """Return a formatted date given the locale or request.
+
+       date should be a tuple (year, month, day[, hour[, minute[,
+       second]]]) or a datetime instance.
+    """
+    if not isinstance(date, datetime):
+        date = datetime(*date)
+    format = 'dateTime' if display_time else 'date'
+    formatter = get_locale_dates(request, locale).getFormatter(format, size)
+    return formatter.format(date)
+
+
+def get_month_names(
+    request=_marker, locale=_marker, calendar='gregorian'):
+    """returns a list of month names for the current locale
+    """
+    dates = get_locale_dates(request, locale)
+    return dates.calendars[calendar].getMonthNames()
+
+
+def get_month_abbreviations(
+    request=_marker, locale=_marker, calendar='gregorian'):
+    """returns a list of abbreviated month names for the current locale
+    """
+    dates = get_locale_dates(request, locale)
+    return dates.calendars[calendar].getMonthAbbreviations()
+
+
+
+# BBB
+getlocaleinfo = lambda self: get_locale_info(self.REQUEST)
+getFormattedNow = lambda self, *args, **kwargs: get_formatted_now(
+    self.REQUEST, *args, **kwargs)
+getFormattedDate = lambda self, *args, **kwargs: get_formatted_date(
+    self.REQUEST, *args, **kwargs)
+getMonthNames = lambda self, *args, **kwargs: get_month_names(
+    self.REQUEST, *args, **kwargs)
+getMonthAbbreviations = lambda self, *args, **kwargs: get_month_abbreviations(
+    self.REQUEST, *args, **kwargs)
