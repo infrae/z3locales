@@ -7,6 +7,8 @@ import time
 
 from zope.i18n.locales import locales
 
+_marker = object()
+
 
 def normalize_language(lang):
     lang = lang.strip().lower()
@@ -14,7 +16,6 @@ def normalize_language(lang):
     lang = lang.replace(' ', '')
     return lang
 
-_marker = object()
 
 def get_locale_info(request):
     assert request != _marker
@@ -106,7 +107,6 @@ def get_month_abbreviations(
     """
     dates = get_locale_dates(request, locale)
     return dates.calendars[calendar].getMonthAbbreviations()
-
 
 
 # BBB
