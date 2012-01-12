@@ -1,12 +1,6 @@
 from z3locales.i18n.locales import locales
 from zope.i18n.interfaces import IUserPreferredLanguages
 
-def normalize_lang(lang):
-    lang = lang.strip().lower()
-    lang = lang.replace('_', '-')
-    lang = lang.replace(' ', '')
-    return lang
-
 def getlocaleinfo(self):
     return IUserPreferredLanguages(
         self.REQUEST).getPreferredLanguages() or ['en']
