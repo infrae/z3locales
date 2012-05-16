@@ -14,7 +14,8 @@ _marker = object()
 def get_locale_info(request):
     if request == _marker:
         return 'en'
-    return IUserPreferredLanguages(request).getPreferredLanguages()[0] or 'en'
+    languages = IUserPreferredLanguages(request).getPreferredLanguages()
+    return (languages and languages[0]) or 'en'
 
 
 def get_locale_dates(request=_marker, locale=_marker):
