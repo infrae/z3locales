@@ -1,10 +1,15 @@
 Changes
 =======
 
+0.5 (unreleased)
+----------------
+
+* ...
+
 0.4 (2012-09-03)
 ----------------
 
-* Use local information from Zope API's getPreferredLanguages when to
+* Use local information from Zope API's getPreferredLanguages when no
   specific local is given.
 
 0.3 (2010-10-06)
