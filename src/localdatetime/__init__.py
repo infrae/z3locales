@@ -6,7 +6,7 @@
 from datetime import datetime
 import time
 
-from zope.i18n.locales import locales
+from zope.i18n.locales import locales, LoadLocaleError
 from zope.i18n.interfaces import IUserPreferredLanguages
 
 _marker = object()
@@ -25,7 +25,10 @@ def get_locale_dates(request=_marker, locale=_marker):
     local_info = locale
     if local_info is _marker:
         local_info = get_locale_info(request)
-    return locales.getLocale(*local_info.split('-')).dates
+    try:
+        return locales.getLocale(*local_info.split('-')).dates
+    except LoadLocaleError:
+        return locales.getLocale('en').dates
 
 
 def get_formatted_now(request):

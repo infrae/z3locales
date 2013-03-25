@@ -10,7 +10,7 @@ from datetime import datetime
 class LocalTimeTestCase(unittest.TestCase):
 
     def test_get_formatted_date_datetime(self):
-        # test some dates from different locales
+        # Test some dates from different locales
         dt = datetime(2005, 02, 01, 19, 13)
 
         fd = localdatetime.get_formatted_date(
@@ -24,6 +24,16 @@ class LocalTimeTestCase(unittest.TestCase):
         fd = localdatetime.get_formatted_date(
             dt, size="long", locale="nl")
         self.assertEquals(u'1 februari 2005 19:13:00 +000', fd)
+
+    def test_get_formatted_date_invalid_locale(self):
+        """If the local is invalid, it should fallback to english.
+        """
+        dt = datetime(2005, 02, 01, 19, 13)
+
+        # Test invalid local
+        fd = localdatetime.get_formatted_date(
+            dt, size="long", locale="u1")
+        self.assertEquals(u'February 1, 2005 7:13:00 PM +000', fd)
 
     def test_get_formatted_date_tuple(self):
         # test some dates from different locales
