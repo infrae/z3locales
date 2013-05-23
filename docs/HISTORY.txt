@@ -1,10 +1,10 @@
 Changes
 =======
 
-0.5 (unreleased)
-----------------
+0.4.1 (2013-05-13)
+------------------
 
-* ...
+* Fallback to english if the local that is asked is not available.
 
 0.4 (2012-09-03)
 ----------------
