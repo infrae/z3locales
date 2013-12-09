@@ -38,3 +38,10 @@ Those functions are available in the module ``localdatetime``:
 
 
 Compatibility API exists with previous versions.
+
+
+Latest version
+==============
+
+The latest version is available in a `Git repository
+<https://github.com/infrae/z3locales>`_.
